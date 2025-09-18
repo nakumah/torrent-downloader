@@ -1,0 +1,53 @@
+QFrame#DashboardPage{
+    background: transparent;
+}
+
+QLabel#PageTitle{
+    font-size: 30px;
+    font-weight: bold;
+    color: dark_rgb;
+}
+
+QFrame#TileHolder{
+    background: transparent;
+}
+
+QLabel#TableLabel{
+    font-size: 14px;
+    color: dark_rgb;
+}
+
+QLabel#DashboardTilePrimaryTitle{
+    font-size: 20px;
+    font-weight: bold;
+    color: dark_tint_rgb;
+}
+
+QLabel#DashboardTileSecondaryTitle{
+    font-size: 12px;
+    color: dark_tint_rgb;
+}
+
+QToolButton#DashboardTileBadge{
+    border-radius: 25px;
+    background-color: rgba(0, 0, 0, 10);
+}
+
+QPushButton#SeeAllTorrentsBtn{
+    padding: 10px;
+    background: transparent;
+    color: primary_rgb;
+    font-weight: 600;
+    font-size: 9;
+    border: none;
+    border-radius: 10px;
+}
+
+QPushButton#SeeAllTorrentsBtn:hover{
+    border: 1px solid primary_tint_rgb;
+}
+
+
+QPushButton#SeeAllTorrentsBtn:pressed{
+    border: 2px solid primary_shade_rgb;
+}

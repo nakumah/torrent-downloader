@@ -1,0 +1,5 @@
+QFrame#NavStack{
+    background: light_rgb;
+    border-radius: 30px;
+    margin: 55px 10px 10px 0px;
+}

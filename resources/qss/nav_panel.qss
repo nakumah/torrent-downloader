@@ -1,0 +1,24 @@
+QFrame#NavPanel{
+    background: transparent;
+}
+
+QToolButton#NavPanelButton{
+    background: transparent;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    color: medium_rgb;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+QToolButton#NavPanelButton:hover{
+    background-color: light_tint_rgb;
+    color: dark_rgb;
+}
+
+QToolButton#NavPanelButton:pressed{
+    background-color: light_shade_rgb;
+    color: primary_rgb;
+    border: 0.1px solid primary_tint_rgb;
+}

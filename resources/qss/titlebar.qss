@@ -1,0 +1,15 @@
+QLineEdit#SearchInput{
+    border: 1px solid medium_tint_rgb;
+    border-radius: 20px;
+    padding: 10px 5px;
+    background: light_rgb;
+    selection-background-color: primary_tint_rgb;
+    font-weight: 600;
+    font-size: 13px;
+    color: dark_rgb;
+    placeholder-text-color: medium_rgb;
+}
+
+QLineEdit#SearchInput:focus{
+    border: 2px solid primary_tint_rgb;
+}

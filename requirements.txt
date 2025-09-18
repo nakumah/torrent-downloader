@@ -1,0 +1,4 @@
+PySide6
+qtawesome
+PySideSix-Frameless-Window
+pyqtgraph
