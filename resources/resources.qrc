@@ -1,0 +1,18 @@
+<!DOCTYPE RCC>
+
+<RCC>
+
+    <qresource prefix="/">
+        <!-- Styles -->
+        <file>qss/common.qss</file>
+        <file>qss/titlebar.qss</file>
+        <file>qss/nav_panel.qss</file>
+        <file>qss/nav_stack.qss</file>
+        <file>qss/dashboard.qss</file>
+
+        <!-- Images -->
+        <file>images/logo.ico</file>
+        <file>images/logo.png</file>
+    </qresource>
+
+</RCC>
