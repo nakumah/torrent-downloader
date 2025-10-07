@@ -3,6 +3,7 @@ import sys
 
 from PySide6.QtWidgets import QApplication
 
+from controllers.main_controller import MainController
 from resources import resources_rc #type: ignore
 
 from views.main_window import MainWindow
@@ -12,8 +13,8 @@ os.environ["QT_QPA_PLATFORM"] = "windows:darkmode=0"  # disable dark mode suppor
 
 def main():
     app = QApplication(sys.argv)
-    window = MainWindow()
-    window.show()
+    controller = MainController(MainWindow())
+    controller.view.show()
     sys.exit(app.exec())
 
 

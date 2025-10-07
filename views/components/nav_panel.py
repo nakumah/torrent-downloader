@@ -1,12 +1,16 @@
 import qtawesome
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import QFrame, QToolButton, QWidget, QToolBar, QGridLayout, QSizePolicy
 
+from core.structures import NavPages
 from resources.app_colors import appColors
 from resources.styling import loadStyle
 
 
 class NavPanel(QFrame):
+
+    panelBtnTriggered = Signal(NavPages)
+
     def __init__(self, parent=None):
         super().__init__(parent=parent)
 
@@ -31,19 +35,19 @@ class NavPanel(QFrame):
         self.searchBtn.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         self.searchBtn.setObjectName("NavPanelButton")
 
-        self.settings = QToolButton(self)
-        self.settings.setText("SETTINGS")
-        self.settings.setIcon(qtawesome.icon("msc.settings-gear", color=appColors.medium_rgb, color_active=appColors.primary_rgb))
-        self.settings.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextUnderIcon)
-        self.settings.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
-        self.settings.setObjectName("NavPanelButton")
+        self.settingsBtn = QToolButton(self)
+        self.settingsBtn.setText("SETTINGS")
+        self.settingsBtn.setIcon(qtawesome.icon("msc.settings-gear", color=appColors.medium_rgb, color_active=appColors.primary_rgb))
+        self.settingsBtn.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextUnderIcon)
+        self.settingsBtn.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        self.settingsBtn.setObjectName("NavPanelButton")
 
         toolbar = QToolBar(self)
         toolbar.setOrientation(Qt.Orientation.Vertical)
         toolbar.addWidget(self.dashboardBtn)
         toolbar.addWidget(self.torrensBtn)
         toolbar.addWidget(self.searchBtn)
-        toolbar.addWidget(self.settings)
+        toolbar.addWidget(self.settingsBtn)
 
         layout = QGridLayout()
         layout.addWidget(QWidget())
@@ -59,3 +63,11 @@ class NavPanel(QFrame):
 
         self.setObjectName("NavPanel")
         self.setStyleSheet(loadStyle(":/qss/nav_panel.qss"))
+
+        self.__configure()
+
+    def __configure(self):
+        self.dashboardBtn.clicked.connect(lambda : self.panelBtnTriggered.emit(NavPages.DASHBOARD))
+        self.torrensBtn.clicked.connect(lambda : self.panelBtnTriggered.emit(NavPages.TORRENTS))
+        self.searchBtn.clicked.connect(lambda : self.panelBtnTriggered.emit(NavPages.SEARCH))
+        self.settingsBtn.clicked.connect(lambda : self.panelBtnTriggered.emit(NavPages.SETTINGS))
