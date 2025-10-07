@@ -65,5 +65,5 @@ def changeWidgetBackground(widget: QWidget, color: str):
     """
     widget.setAutoFillBackground(True)
     palette = widget.palette()
-    palette.setColor(QPalette.Window, QColor(color))
+    palette.setColor(QPalette.ColorRole.Window, QColor(color))
     widget.setPalette(palette)

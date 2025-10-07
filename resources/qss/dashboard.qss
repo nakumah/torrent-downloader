@@ -38,7 +38,7 @@ QPushButton#SeeAllTorrentsBtn{
     background: transparent;
     color: primary_rgb;
     font-weight: 600;
-    font-size: 9;
+    font-size: 9px;
     border: none;
     border-radius: 10px;
 }

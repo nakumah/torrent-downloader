@@ -3,11 +3,11 @@ import qtawesome
 from PySide6.QtCharts import QChart, QChartView, QSplineSeries, QAreaSeries
 from PySide6.QtCore import QSize
 from PySide6.QtGui import (QBrush, QIcon)
-from PySide6.QtWidgets import (QFrame, QLabel, QWidget, QPushButton, QTableView,
-                               QGridLayout, QVBoxLayout, QToolButton)
+from PySide6.QtWidgets import (QFrame, QLabel, QWidget, QPushButton, QGridLayout, QVBoxLayout, QToolButton)
 
 from resources.app_colors import appColors
 from resources.styling import loadStyle, parseStyle
+from views.components.torrents_table import TorrentsTable
 
 
 class DashboardGraph(QFrame):
@@ -128,7 +128,7 @@ class DashboardPage(QFrame):
                                       appColors.hover_shade_rgb, "3.2 Gb", "Used of 20Gb")
         self.seeAllTorrentsBtn = QPushButton("SEE ALL TORRENTS")
         self.seeAllTorrentsBtn.setObjectName("SeeAllTorrentsBtn")
-        self.recentTorrentsTable = QTableView()
+        self.recentTorrentsTable = TorrentsTable()
 
         tileLayout = QGridLayout()
         tileLayout.addWidget(self.overviewGraph, 0, 0, 2, 1)

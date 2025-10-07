@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QFrame, QStackedLayout, QLabel, QStackedWidget, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QFrame, QStackedWidget, QVBoxLayout
 
 from resources.styling import loadStyle
 from views.pages.dashboard_page import DashboardPage
