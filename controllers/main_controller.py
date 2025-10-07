@@ -14,7 +14,7 @@ class MainController:
     # region initialize
 
     def __initialize(self):
-        pass
+        self.view.navStack.setCurrentPage(NavPages.SEARCH)
 
     # endregion
 

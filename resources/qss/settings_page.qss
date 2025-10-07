@@ -1,0 +1,4 @@
+QFrame#SettingsPage{
+    background: transparent;
+}
+

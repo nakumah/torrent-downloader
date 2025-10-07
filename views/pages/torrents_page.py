@@ -2,7 +2,7 @@ import PySide6.QtWidgets as qtw
 
 from resources.styling import loadStyle
 from views.components.check_badges import CheckBadgeGroup
-from views.components.torrents_table import TorrentsTable
+from views.components.torrents_table import ActiveTorrentsTable
 
 
 class TorrentsPage(qtw.QFrame):
@@ -19,7 +19,7 @@ class TorrentsPage(qtw.QFrame):
         self.filterGroup.addBadge("Uploading", "uploading")
         self.filterGroup.addBadge("Downloading", "downloading")
 
-        self.torrentsTable = TorrentsTable()
+        self.torrentsTable = ActiveTorrentsTable()
 
         pageLayout = qtw.QGridLayout()
         pageLayout.setContentsMargins(20, 30, 20, 10)

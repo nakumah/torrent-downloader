@@ -35,7 +35,7 @@ class MainWindow(FramelessMainWindow):
         # self.setWindowIcon(QIcon(":/icons/icon.png"))
 
         self.titleBar.raise_()
-        self.resize(700, 700)
+        self.resize(1080, 720)
 
     def setWindowIcon(self, icon, /):
         self.customTitleBar.setIcon(icon)

@@ -7,7 +7,7 @@ from PySide6.QtWidgets import (QFrame, QLabel, QWidget, QPushButton, QGridLayout
 
 from resources.app_colors import appColors
 from resources.styling import loadStyle, parseStyle
-from views.components.torrents_table import TorrentsTable
+from views.components.torrents_table import ActiveTorrentsTable
 
 
 class DashboardGraph(QFrame):
@@ -128,7 +128,7 @@ class DashboardPage(QFrame):
                                       appColors.hover_shade_rgb, "3.2 Gb", "Used of 20Gb")
         self.seeAllTorrentsBtn = QPushButton("SEE ALL TORRENTS")
         self.seeAllTorrentsBtn.setObjectName("SeeAllTorrentsBtn")
-        self.recentTorrentsTable = TorrentsTable()
+        self.recentTorrentsTable = ActiveTorrentsTable()
 
         tileLayout = QGridLayout()
         tileLayout.addWidget(self.overviewGraph, 0, 0, 2, 1)

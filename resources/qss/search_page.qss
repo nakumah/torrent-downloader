@@ -1,0 +1,4 @@
+QFrame#SearchPage{
+    background: transparent;
+}
+

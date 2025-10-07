@@ -7,3 +7,41 @@ QLabel#PageTitle{
     font-weight: bold;
     color: dark_rgb;
 }
+
+
+
+/* ========= BrowseTorrentsTable ================= */
+
+QTableWidget#BrowseTorrentsTable{
+    color: dark_rgb;
+    selection-color: light_rgb;
+    selection-background-color: highlight_rgb;
+    border: 1px solid light_shade_rgb;
+}
+
+QTableWidget#BrowseTorrentsTable QHeaderView::section{
+    background: light_shade_rgb;
+    font-weight: bold;
+    font-size: 16;
+    color: dark_rgb;
+    padding: 10px
+}
+
+
+/* ========= ActiveTorrentsTable ================= */
+
+QTableWidget#ActiveTorrentsTable{
+    color: dark_rgb;
+    selection-color: light_rgb;
+    selection-background-color: highlight_rgb;
+    border: 1px solid light_shade_rgb;
+}
+
+QTableWidget#ActiveTorrentsTable QHeaderView::section{
+    background: light_shade_rgb;
+    font-weight: bold;
+    font-size: 16;
+    color: dark_rgb;
+    padding: 10px
+}
+
