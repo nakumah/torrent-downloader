@@ -9,6 +9,8 @@
         <file>qss/nav_panel.qss</file>
         <file>qss/nav_stack.qss</file>
         <file>qss/dashboard.qss</file>
+        <file>qss/torrents_page.qss</file>
+        <file>qss/check_badge.qss</file>
 
         <!-- Images -->
         <file>images/logo.ico</file>

@@ -2,6 +2,7 @@ from PySide6.QtWidgets import QFrame, QStackedWidget, QVBoxLayout
 
 from resources.styling import loadStyle
 from views.pages.dashboard_page import DashboardPage
+from views.pages.torrents_page import TorrentsPage
 
 
 class NavStack(QFrame):
@@ -10,6 +11,7 @@ class NavStack(QFrame):
 
         self.__pages: dict[str, DashboardPage] = {
             "dashboard": DashboardPage(),
+            "torrents": TorrentsPage(),
         }
         self.__idxMap: dict[int, str] = {}
 
@@ -17,6 +19,7 @@ class NavStack(QFrame):
         for k, page in self.__pages.items():
             idx = self.contentWidget.addWidget(page)
             self.__idxMap[idx] = k
+            self.contentWidget.setCurrentIndex(idx)
 
         layout = QVBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)

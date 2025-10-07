@@ -1,0 +1,4 @@
+QFrame#TorrentsPage{
+    background: transparent;
+}
+

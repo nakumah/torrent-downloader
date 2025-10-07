@@ -1,0 +1,15 @@
+
+QFrame#CheckBadge{
+    background: white;
+    border-radius: 10px;
+    border: 1px solid light_shade_rgb;
+}
+
+QFrame#CheckBadge:hover{
+    background: highlight_shade_rgb;
+}
+
+QFrame#CheckBadge QLabel{
+    color: dark_rgb;
+    font-weight: 600;
+}

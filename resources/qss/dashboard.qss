@@ -2,11 +2,6 @@ QFrame#DashboardPage{
     background: transparent;
 }
 
-QLabel#PageTitle{
-    font-size: 30px;
-    font-weight: bold;
-    color: dark_rgb;
-}
 
 QFrame#TileHolder{
     background: transparent;
