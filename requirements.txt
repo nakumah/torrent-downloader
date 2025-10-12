@@ -3,3 +3,4 @@ qtawesome~=1.4.0
 PySideSix-Frameless-Window
 pandas~=2.3.0
 numpy~=1.26.4
+1337x==2.1.0
