@@ -1,5 +1,4 @@
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QFontMetrics
 from PySide6.QtWidgets import QTableWidget, QHeaderView, QAbstractItemView, QTableWidgetItem
 
 from core.structures import TorrentCategory, BrowseTableColumns
@@ -15,6 +14,7 @@ class ActiveTorrentsTable(QTableWidget):
         self.horizontalHeader().setVisible(False)
 
         self.setColumnCount(3)
+        self.setRowCount(0)
 
         self.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
         self.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.Fixed)
@@ -22,8 +22,6 @@ class ActiveTorrentsTable(QTableWidget):
         self.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
         self.setSelectionMode(QAbstractItemView.SelectionMode.NoSelection)
         self.setObjectName("ActiveTorrentsTable")
-
-        self.__populate()
 
     def __populate(self):
         self.setRowCount(3)
@@ -56,10 +54,8 @@ class BrowseTorrentsTable(QTableWidget):
         self.verticalHeader().setVisible(False)
 
         self.setAlternatingRowColors(True)
-        self.setSelectionMode(QAbstractItemView.SelectionMode.NoSelection)
 
         self.resetTable()
-        self.__populate()
         self.setObjectName("BrowseTorrentsTable")
 
     def resetTable(self):
@@ -88,37 +84,6 @@ class BrowseTorrentsTable(QTableWidget):
         # configure vertical header
         self.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
 
-
-    def __populate(self):
-        self.resetTable()
-
-        self.setRowCount(3)
-        exts = [TorrentCategory.MOVIES, TorrentCategory.TV, TorrentCategory.ANIME]
-        for row in range(3):
-            icon = getIconFromCategory(exts[row])
-
-            name_entry = "The lord of files and Mystery" * 2
-            collapsed_entry = QFontMetrics(self.font()).elidedText(
-                name_entry,
-                Qt.TextElideMode.ElideRight,
-                int(self.columnWidth(BrowseTableColumns.NAME) * 2.5),
-            )
-            nameItem = QTableWidgetItem(icon, collapsed_entry)
-            nameItem.setToolTip(name_entry)
-
-            seedersItem = QTableWidgetItem("0")
-            leechersItem = QTableWidgetItem("0")
-            timeItem = QTableWidgetItem("10:50am")
-            sizeItem = QTableWidgetItem("245.3MB")
-            uploaderItem = QTableWidgetItem("Awakedom")
-
-            self.setItem(row, BrowseTableColumns.NAME, nameItem)
-            self.setItem(row, BrowseTableColumns.SEEDERS, seedersItem)
-            self.setItem(row, BrowseTableColumns.LEECHERS, leechersItem)
-            self.setItem(row, BrowseTableColumns.TIME, timeItem)
-            self.setItem(row, BrowseTableColumns.SIZE, sizeItem)
-            self.setItem(row, BrowseTableColumns.UPLOADER, uploaderItem)
-
     @staticmethod
     def __configureItem(col: int, item: QTableWidgetItem):
         if col == BrowseTableColumns.NAME:
@@ -126,7 +91,7 @@ class BrowseTorrentsTable(QTableWidget):
         else:
             item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        itemFlags = Qt.ItemFlag.ItemIsEnabled
+        itemFlags = Qt.ItemFlag.ItemIsEnabled |  Qt.ItemFlag.ItemIsSelectable
         item.setFlags(itemFlags)
 
     def setItem(self, row, col, item):

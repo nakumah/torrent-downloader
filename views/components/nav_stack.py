@@ -40,3 +40,6 @@ class NavStack(QFrame):
         if stackId is None:
             return
         self.contentWidget.setCurrentIndex(stackId)
+
+    def getPage(self, page: NavPages):
+        return self.__pages[page]

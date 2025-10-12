@@ -16,12 +16,18 @@ class BrowseTableColumns(enum.IntEnum):
 
 # See `https://github.com/hemantapkh/1337x/blob/main/py1337x/types/category.py`
 class TorrentCategory(enum.StrEnum):
-    MOVIES = 'movies'
-    TV = 'tv'
-    GAMES = 'games'
-    MUSIC = 'music'
-    APPS = 'apps'
-    ANIME = 'anime'
-    DOCUMENTARIES = 'documentaries'
-    XXX = 'xxx'
-    OTHER = 'other'
+    MOVIES = "movies"
+    TV = "tv"
+    GAMES = "games"
+    MUSIC = "music"
+    APPS = "apps"
+    ANIME = "anime"
+    DOCUMENTARIES = "documentaries"
+    XXX = "xxx"
+    OTHER = "other"
+
+class TorrentSortBy(enum.StrEnum):
+    TIME = "time"
+    SIZE = "size"
+    SEEDERS = "seeders"
+    LEECHERS = "leechers"
