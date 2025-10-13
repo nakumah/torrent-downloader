@@ -261,6 +261,7 @@ class SearchPage(qtw.QFrame):
         headerLayout.setContentsMargins(0, 0, 0, 0)
         headerLayout.addWidget(self.paginationToolbar)
         headerLayout.addStretch()
+        headerLayout.addWidget(qtw.QLabel('Category:'))
         headerLayout.addWidget(self.categoryComboBox)
         headerLayout.addWidget(self.sortByComboBox)
 

@@ -1,4 +1,4 @@
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QItemSelectionModel
 from PySide6.QtWidgets import QTableWidget, QHeaderView, QAbstractItemView, QTableWidgetItem
 
 from core.structures import TorrentCategory, BrowseTableColumns
@@ -57,6 +57,16 @@ class BrowseTorrentsTable(QTableWidget):
 
         self.resetTable()
         self.setObjectName("BrowseTorrentsTable")
+
+        self.__configure()
+
+    def __configure(self):
+        self.cellClicked.connect(lambda row, col: self.__highlightRow(row))
+
+    def __highlightRow(self, row):
+        selectionModel = self.selectionModel()
+        flag = QItemSelectionModel.SelectionFlag.Select | QItemSelectionModel.SelectionFlag.Rows
+        selectionModel.select(self.model().index(row, 0), flag)
 
     def resetTable(self):
         self.clear()
