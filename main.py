@@ -13,7 +13,7 @@ os.environ["QT_QPA_PLATFORM"] = "windows:darkmode=0"  # disable dark mode suppor
 
 def main():
     app = QApplication(sys.argv)
-    controller = MainController(MainWindow())
+    controller = MainController(MainWindow(), app)
     controller.view.show()
     sys.exit(app.exec())
 

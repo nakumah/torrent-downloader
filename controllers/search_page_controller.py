@@ -2,8 +2,9 @@ import PySide6.QtCore as qtc
 import PySide6.QtGui as qtg
 import PySide6.QtWidgets as qtw
 
-from py1337x.models import TorrentResult, TorrentItem
+from py1337x.models import TorrentResult, TorrentItem, TorrentInfo
 
+from core.signal_bus import signalBus
 from core.structures import TorrentCategory, TorrentSortBy, BrowseTableColumns
 from core.workers import getIconFromCategory
 from views.pages.search_page import SearchPage
@@ -12,16 +13,19 @@ from views.pages.search_page import SearchPage
 class SearchPageController(qtc.QObject):
 
     configReady = qtc.Signal()
+    loadInfo = qtc.Signal()
+    torrentClicked = qtc.Signal(str)
 
     def __init__(self, view: SearchPage, parent=None):
         super().__init__(parent=parent)
 
         self.view = view
 
-        self.__searchConfig: dict[str, str | int] = {
+        self.__searchConfig: dict[str, ...] = {
             "page": 1,
             "sort_by": TorrentSortBy.SEEDERS,
             "category": TorrentCategory.TV,
+            "torrent_id": None,
         }
 
         self.__initialize()
@@ -51,6 +55,7 @@ class SearchPageController(qtc.QObject):
         self.view.sortByComboBox.setCurrentIndex(2)
 
         self.view.progressBar.hide()
+        self.view.bottomWidget.hide()
 
     # endregion
 
@@ -60,13 +65,39 @@ class SearchPageController(qtc.QObject):
         self.view.sortByComboBox.currentIndexChanged.connect(self.__handleSortComboBoxChanged)
         self.view.paginationToolbar.triggered.connect(self.__handlePaginationTriggered)
 
+        self.view.torrentsTable.cellDoubleClicked.connect(self.__handleTableCellDoubleClicked)
+
+        self.view.torrentInfoWidget.controlToolbar.actionTriggered.connect(self.__handleTorrentInfoToolbarTriggered)
+        self.view.torrentInfoWidget.magnetDownloadButton.clicked.connect(self.__handleMagnetDownloadClicked)
+        self.view.torrentInfoWidget.copyInfoHashButton.clicked.connect(self.__handleCopyInfoHashClicked)
+
     # endregion
 
     # region workers
+
     def showLoading(self, state):
         self.view.progressBar.setVisible(state)
 
-    def populate(self, data: TorrentResult, category: TorrentCategory):
+    def populateTorrentInfo(self, data: TorrentInfo):
+        print("[THUMBNAIL]", data.thumbnail)
+
+        pixmap = qtg.QPixmap(":/images/torrent_file.png").scaled(128, 128)
+        self.view.torrentInfoWidget.thumbnailLabel.setPixmap(pixmap)
+
+        self.view.torrentInfoWidget.nameValueLabel.setText(data.name)
+        self.view.torrentInfoWidget.categoryValueLabel.setText(data.category)
+        self.view.torrentInfoWidget.typeValueLabel.setText(data.type)
+        self.view.torrentInfoWidget.languageValueLabel.setText(data.language)
+        self.view.torrentInfoWidget.totalSizeValueLabel.setText(data.size)
+        self.view.torrentInfoWidget.uploadedByValueLabel.setText(data.uploader)
+        self.view.torrentInfoWidget.downloadsValueLabel.setText(data.downloads)
+        self.view.torrentInfoWidget.lastCheckedValueLabel.setText(data.last_checked)
+        self.view.torrentInfoWidget.dateUploadedValueLabel.setText(data.date_uploaded)
+        self.view.torrentInfoWidget.seedersValueLabel.setText(data.seeders)
+        self.view.torrentInfoWidget.leechersValueLabel.setText(data.leechers)
+        self.view.torrentInfoWidget.infoHashValueLabel.setText(data.info_hash)
+
+    def populateTorrentTable(self, data: TorrentResult, category: TorrentCategory):
         # update the page counts
         self.view.paginationToolbar.setTotalPages(data.page_count)
         self.view.paginationToolbar.setCurrentPage(data.current_page)
@@ -87,6 +118,7 @@ class SearchPageController(qtc.QObject):
             )
             nameItem = qtw.QTableWidgetItem(icon, collapsed_entry)
             nameItem.setToolTip(name_entry)
+            nameItem.setData(qtg.Qt.ItemDataRole.UserRole, torrentItem.torrent_id)
 
             seedersItem = qtw.QTableWidgetItem(torrentItem.seeders)
             leechersItem = qtw.QTableWidgetItem(torrentItem.leechers)
@@ -101,24 +133,53 @@ class SearchPageController(qtc.QObject):
             self.view.torrentsTable.setItem(row, BrowseTableColumns.SIZE, sizeItem)
             self.view.torrentsTable.setItem(row, BrowseTableColumns.UPLOADER, uploaderItem)
 
-    def __trigger(self):
-        self.configReady.emit()
-
+    def __flagTorrent(self, row: int):
+        nameItem: qtw.QTableWidgetItem = self.view.torrentsTable.item(row, 0)
+        torrent_id: str = nameItem.data(qtg.Qt.ItemDataRole.UserRole)
+        self.__searchConfig["torrent_id"] = torrent_id
     # endregion
 
     # region event handlers
 
+    # region torrent info
+    def __handleTorrentInfoToolbarTriggered(self, action: qtg.QAction):
+        if action.data() == "close":
+            self.view.bottomWidget.hide()
+
+        if action.data() == "refresh":
+            self.loadInfo.emit()
+
+    def __handleMagnetDownloadClicked(self):
+        print("magnet download clicked")
+
+    def __handleCopyInfoHashClicked(self):
+        text = self.view.torrentInfoWidget.infoHashValueLabel.text()
+        signalBus.CopyToClipboard.emit(text)
+
+    # endregion
+
+    # region search
+
     def __handleCategoryComboBoxChanged(self, index: int) -> None:
         self.__searchConfig["category"] = self.view.categoryComboBox.itemData(index)
-        self.__trigger()
+        self.configReady.emit()
 
     def __handleSortComboBoxChanged(self, index: int) -> None:
         self.__searchConfig["sort_by"] = self.view.sortByComboBox.itemData(index)
-        self.__trigger()
+        self.configReady.emit()
 
     def __handlePaginationTriggered(self, page: int) -> None:
         self.__searchConfig["page"] = page
-        self.__trigger()
+        self.configReady.emit()
+
+    def __handleTableCellClicked(self, row: int, _: int) -> None:
+        self.__flagTorrent(row)
+
+    def __handleTableCellDoubleClicked(self, row: int, _: int) -> None:
+        self.__flagTorrent(row)
+        self.loadInfo.emit()
+
+    # endregion
 
     # endregion
 

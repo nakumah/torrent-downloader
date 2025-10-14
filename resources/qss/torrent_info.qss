@@ -1,0 +1,37 @@
+QFrame#TorrentInfoWidget{
+    background: white;
+    border: 1px solid light_shade_rgb;
+}
+
+
+QFrame#TorrentInfoWidgetControl{
+    background-color: transparent;
+    border-bottom: 1px solid light_shade_rgb;
+}
+
+QLabel#TorrentNameValueLabel{
+    font-size: 20px;
+    font-weight: bold;
+    color: secondary_rgb;
+    padding-bottom: 10px;
+}
+
+QLabel#TorrentThumbnailLabel{
+    border: 1px solid light_tint_rgb;
+}
+
+QPushButton#MagnetDownloadButton{
+    font-size: 15px;
+    font-weight: bold;
+    padding: 10px 20px 10px 20px;
+    background: secondary_rgb;
+    color: light_rgb;
+}
+
+QPushButton#MagnetDownloadButton:hover{
+    background: secondary_tint_rgb;
+}
+
+QPushButton#MagnetDownloadButton:pressed{
+    background: secondary_shade_rgb;
+}

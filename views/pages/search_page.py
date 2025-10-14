@@ -6,6 +6,7 @@ import PySide6.QtCore as qtc
 
 from resources.app_colors import appColors
 from resources.styling import loadStyle
+from views.components.torrent_info_widget import TorrentInfoWidget
 from views.components.torrents_table import BrowseTorrentsTable
 
 import qtawesome as qta
@@ -273,13 +274,34 @@ class SearchPage(qtw.QFrame):
         self.contentStack.addWidget(self.torrentsTable)
         self.contentStack.setCurrentIndex(1)
 
+        topLayout = qtw.QVBoxLayout()
+        topLayout.setContentsMargins(0, 0, 0, 0)
+        topLayout.addWidget(self.contentStack)
+
+        topWidget = qtw.QWidget()
+        topWidget.setLayout(topLayout)
+
+        self.torrentInfoWidget = TorrentInfoWidget()
+
+        bottomLayout = qtw.QVBoxLayout()
+        bottomLayout.setContentsMargins(0, 0, 0, 0)
+        bottomLayout.addWidget(self.torrentInfoWidget)
+
+        self.bottomWidget = qtw.QWidget()
+        self.bottomWidget.setLayout(bottomLayout)
+
+        pageSplitter = qtw.QSplitter(qtg.Qt.Orientation.Vertical)
+        pageSplitter.addWidget(topWidget)
+        pageSplitter.addWidget(self.bottomWidget)
+        pageSplitter.setChildrenCollapsible(False)
+
         pageLayout = qtw.QGridLayout()
         pageLayout.setContentsMargins(20, 0, 20, 10)
 
         pageLayout.addWidget(self.progressBar)
         pageLayout.addWidget(pageTitle)
         pageLayout.addWidget(self.header)
-        pageLayout.addWidget(self.contentStack)
+        pageLayout.addWidget(pageSplitter)
         pageLayout.setRowStretch(3, 1)
 
         self.setLayout(pageLayout)

@@ -1,4 +1,5 @@
-from py1337x.models import TorrentResult
+from PySide6.QtWidgets import QApplication
+from py1337x.models import TorrentResult, TorrentInfo
 
 from controllers.search_page_controller import SearchPageController
 from core.signal_bus import signalBus
@@ -11,11 +12,12 @@ from views.main_window import MainWindow
 
 
 class MainController:
-    def __init__(self, view: MainWindow):
+    def __init__(self, view: MainWindow, app: QApplication):
 
         self.TORRENT_MANAGER = TorrentManager()
         self.THREAD_MANAGER = TheadManager()
 
+        self.app = app
         self.view = view
 
         self.searchPageController = SearchPageController(view=view.navStack.getPage(NavPages.SEARCH))
@@ -32,6 +34,7 @@ class MainController:
 
         self.__initialize()
         self.__configure()
+        self.__connectSignals()
 
     # region initialize
 
@@ -47,6 +50,7 @@ class MainController:
         self.view.navPanel.panelBtnTriggered.connect(self.__handlePanelTriggered)
         self.view.customTitleBar.searchInput.searchReady.connect(self.__handleSearchInputReady)
         self.searchPageController.configReady.connect(self.__handleSearchConfigReady)
+        self.searchPageController.loadInfo.connect(self.__handleLoadTorrentInfo)
 
     # endregion
 
@@ -60,44 +64,86 @@ class MainController:
 
         self.__searchConfig.update(conf)
 
-    # region query endpoint
+    # region query search endpoint
 
-    def onQueryStart(self, _=None):
+    def onQuerySearchStart(self, _=None):
         self.searchPageController.showLoading(True)
 
-    def onQuerySuccessful(self, res: TorrentResult):
-        self.searchPageController.populate(res, self.__searchConfig['category'])
+    def onQuerySearchSuccessful(self, res: TorrentResult):
+        self.searchPageController.populateTorrentTable(res, self.__searchConfig['category'])
         self.searchPageController.showLoading(False)
 
-    def onQueryError(self, error):
+    def onQuerySearchError(self, error):
         self.searchPageController.showLoading(False)
         print("QUERY ERROR: {}".format(error))
 
-    def queryEndpoint(self):
+    def querySearchEndpoint(self):
 
         model = WorkerThreadDataModel(
-            pid="search", on_success=self.onQuerySuccessful, on_error=self.onQueryError,
-            on_start=self.onQueryStart, task_params=self.__searchConfig, task=self.TORRENT_MANAGER.search, override=True
+            pid="query-search", on_success=self.onQuerySearchSuccessful, on_error=self.onQuerySearchError,
+            on_start=self.onQuerySearchStart, task_params=self.__searchConfig, task=self.TORRENT_MANAGER.search, override=True
         )
         thread = WorkerThread(model=model)
         signalBus.launchThread.emit(thread)
 
+    # endregion
+
+    # region query info endpoint
+
+    def onQueryInfoStart(self, _=None):
+        self.searchPageController.showLoading(True)
+
+    def onQueryInfoSuccessful(self, res: TorrentInfo):
+        self.searchPageController.view.bottomWidget.show()
+        self.searchPageController.populateTorrentInfo(res)
+        self.searchPageController.showLoading(False)
+
+    def onQueryInfoError(self, error):
+        self.searchPageController.showLoading(False)
+        print("QUERY ERROR: {}".format(error))
+
+    def queryInfoEndpoint(self):
+        if self.__searchConfig.get("torrent_id") is None:
+            return
+
+        model = WorkerThreadDataModel(
+            pid="query-info", on_success=self.onQueryInfoSuccessful, on_error=self.onQueryInfoError,
+            on_start=self.onQueryInfoStart, task_params=self.__searchConfig, task=self.TORRENT_MANAGER.info, override=True
+        )
+        thread = WorkerThread(model=model)
+        signalBus.launchThread.emit(thread)
 
     # endregion
 
     # endregion
 
     # region event handlers
+    def __handleLoadTorrentInfo(self):
+        self.__searchConfig["torrent_id"] = self.searchPageController.searchConfig().get("torrent_id", None)
+        self.queryInfoEndpoint()
+
     def __handleSearchConfigReady(self):
         self.__updateSearchConfig(self.searchPageController.searchConfig())
-        self.queryEndpoint()
+        self.querySearchEndpoint()
 
     def __handleSearchInputReady(self, text: str):
         self.view.navStack.setCurrentPage(NavPages.SEARCH)
         self.__updateSearchConfig({'query': text})
-        self.queryEndpoint()
+        self.querySearchEndpoint()
 
     def __handlePanelTriggered(self, page: NavPages):
         self.view.navStack.setCurrentPage(page)
+
+    def __handleCopyToClipboard(self, value: object):
+        clipboard = self.app.clipboard()
+        clipboard.setText(str(value))
+
+    # endregion
+
+
+    # region connect signals
+
+    def __connectSignals(self):
+        signalBus.CopyToClipboard.connect(self.__handleCopyToClipboard)
 
     # endregion
