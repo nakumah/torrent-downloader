@@ -51,6 +51,7 @@ class MainController:
         self.view.customTitleBar.searchInput.searchReady.connect(self.__handleSearchInputReady)
         self.searchPageController.configReady.connect(self.__handleSearchConfigReady)
         self.searchPageController.loadInfo.connect(self.__handleLoadTorrentInfo)
+        self.searchPageController.downloadRequested.connect(self.__handleDownloadClicked)
 
     # endregion
 
@@ -118,6 +119,9 @@ class MainController:
     # endregion
 
     # region event handlers
+    def __handleDownloadClicked(self, info: TorrentInfo):
+        pass
+
     def __handleLoadTorrentInfo(self):
         self.__searchConfig["torrent_id"] = self.searchPageController.searchConfig().get("torrent_id", None)
         self.queryInfoEndpoint()

@@ -1,0 +1,4 @@
+QDialog#PreviewDialog{
+    border-top: 1px solid light_shade_rgb;
+    padding: 30px;
+}
