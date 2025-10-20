@@ -10,6 +10,7 @@
         <file>qss/nav_panel.qss</file>
         <file>qss/nav_stack.qss</file>
         <file>qss/check_badge.qss</file>
+        <file>qss/preview_dialog.qss</file>
 
         <file>qss/dashboard.qss</file>
         <file>qss/torrents_page.qss</file>

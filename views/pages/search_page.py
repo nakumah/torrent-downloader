@@ -11,6 +11,8 @@ from views.components.torrents_table import BrowseTorrentsTable
 
 import qtawesome as qta
 
+from views.dialogs.torrent_preview_dialog import TorrentPreviewDialog
+
 
 class SearchPagePlaceholder(qtw.QFrame):
     def __init__(self, parent=None):
@@ -237,6 +239,8 @@ class PaginationToolBar(qtw.QFrame):
 class SearchPage(qtw.QFrame):
     def __init__(self, parent=None):
         super().__init__(parent)
+
+        self.previewDialog = TorrentPreviewDialog()
 
         pageTitle = qtw.QLabel("Search Online")
         pageTitle.setObjectName('PageTitle')

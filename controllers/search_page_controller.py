@@ -1,3 +1,5 @@
+import os
+
 import PySide6.QtCore as qtc
 import PySide6.QtGui as qtg
 import PySide6.QtWidgets as qtw
@@ -15,6 +17,7 @@ class SearchPageController(qtc.QObject):
     configReady = qtc.Signal()
     loadInfo = qtc.Signal()
     torrentClicked = qtc.Signal(str)
+    downloadRequested = qtc.Signal(TorrentInfo)
 
     def __init__(self, view: SearchPage, parent=None):
         super().__init__(parent=parent)
@@ -26,6 +29,7 @@ class SearchPageController(qtc.QObject):
             "sort_by": TorrentSortBy.SEEDERS,
             "category": TorrentCategory.TV,
             "torrent_id": None,
+            "torrent_info": None,
         }
 
         self.__initialize()
@@ -55,7 +59,7 @@ class SearchPageController(qtc.QObject):
         self.view.sortByComboBox.setCurrentIndex(2)
 
         self.view.progressBar.hide()
-        self.view.bottomWidget.hide()
+        self.view.bottomWidget.show()
 
     # endregion
 
@@ -79,6 +83,9 @@ class SearchPageController(qtc.QObject):
         self.view.progressBar.setVisible(state)
 
     def populateTorrentInfo(self, data: TorrentInfo):
+
+        self.__searchConfig["torrent_info"] = data
+
         print("[THUMBNAIL]", data.thumbnail)
 
         pixmap = qtg.QPixmap(":/images/torrent_file.png").scaled(128, 128)
@@ -150,7 +157,28 @@ class SearchPageController(qtc.QObject):
             self.loadInfo.emit()
 
     def __handleMagnetDownloadClicked(self):
-        print("magnet download clicked")
+        torrentInfo = self.__searchConfig.get("torrent_info", None)
+        if not isinstance(torrentInfo, TorrentInfo):
+            qtw.QMessageBox.information(
+                self.view,
+                "Torrent Info",
+                "Not a valid torrent, use search to trigger valid torrent"
+            )
+            return
+
+        saveLocation = os.path.join(os.getcwd(), "AppData")
+        exitCode = self.view.previewDialog.launch(torrentInfo, saveLocation)
+        if exitCode != qtw.QDialog.DialogCode.Accepted:
+            print("dialog not accepted")
+            return
+
+        saveFolder: str = self.view.previewDialog.saveFolder()
+        if saveFolder is None:
+            qtw.QMessageBox.critical(self.view, "Save Directory", "Provided save folder does not exist")
+            return
+
+        print("magnet download confirmed, saving to folder", saveFolder)
+        self.downloadRequested.emit(torrentInfo)
 
     def __handleCopyInfoHashClicked(self):
         text = self.view.torrentInfoWidget.infoHashValueLabel.text()
