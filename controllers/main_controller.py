@@ -120,6 +120,9 @@ class MainController:
 
     # region event handlers
     def __handleDownloadClicked(self, info: TorrentInfo):
+        # when a download is requested
+        # - add the entry to the database.
+        # - trigger the torrents page to start a new download with the torrent id.
         pass
 
     def __handleLoadTorrentInfo(self):

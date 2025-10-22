@@ -169,7 +169,6 @@ class SearchPageController(qtc.QObject):
         saveLocation = os.path.join(os.getcwd(), "AppData")
         exitCode = self.view.previewDialog.launch(torrentInfo, saveLocation)
         if exitCode != qtw.QDialog.DialogCode.Accepted:
-            print("dialog not accepted")
             return
 
         saveFolder: str = self.view.previewDialog.saveFolder()
@@ -177,7 +176,6 @@ class SearchPageController(qtc.QObject):
             qtw.QMessageBox.critical(self.view, "Save Directory", "Provided save folder does not exist")
             return
 
-        print("magnet download confirmed, saving to folder", saveFolder)
         self.downloadRequested.emit(torrentInfo)
 
     def __handleCopyInfoHashClicked(self):

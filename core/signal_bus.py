@@ -6,6 +6,8 @@ class SignalBus(qtc.QObject):
     terminateThread = qtc.Signal(str)
     stopThread = qtc.Signal(str)
     CopyToClipboard = qtc.Signal(object)
+    QueryDatabase = qtc.Signal(object)
+    LogToConsole = qtc.Signal(object)
 
 
 signalBus = SignalBus()
